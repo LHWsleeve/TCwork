@@ -179,7 +179,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--din', default='/home/sleeve/×ÀÃæ/TCwork_git/data/wikisql_tok1', help='data directory')
     parser.add_argument('--dout', default='/home/sleeve/×ÀÃæ/TCwork_git/data/wikisql_tok1/test_tok', help='output directory')
-    parser.add_argument('--split', default='train, dev'::q, help='comma=separated list of splits to process') #'train,dev,test'
+    parser.add_argument('--split', default='train, dev', help='comma=separated list of splits to process') #'train,dev,test'
     args = parser.parse_args()
 
     answer_toy = not True
