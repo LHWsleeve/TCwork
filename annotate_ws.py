@@ -24,9 +24,9 @@ def annotate(sentence, lower=True):
     words, gloss, after = [], [], []
     for s in client.annotate(sentence):
         for t in s:
-            words.append(t.word)
-            gloss.append(t.originalText)
-            after.append(t.after)
+            words.append(t.word) #词级分词（后面要lower）
+            gloss.append(t.originalText) # 词级分词
+            after.append(t.after) #原问尾，因为是问句，所以是右侧引号
     if lower:
         words = [w.lower() for w in words]
     return {
@@ -116,13 +116,15 @@ def annotate_example_ws(example, table):
     Jan. 2019: Wonseok
     Annotate only the information that will be used in our model.
     """
-    ann = {'table_id': example['table_id'], 'phase': example['phase']}
+    ann = {'table_id': example['table_id']}
     _nlu_ann = annotate(example['question'])
     ann['question'] = example['question']
     ann['question_tok'] = _nlu_ann['gloss']
-    # ann['table'] = {
-    #     'header': [annotate(h) for h in table['header']],
-    # }
+    '''
+    训练集和验证集需要使用以下代码，测试集不需要
+    ann['table'] = {
+        'header': [annotate(h) for h in table['header']],
+    }
     ann['sql'] = example['sql']
     ann['query'] = sql = copy.deepcopy(example['sql'])
 
@@ -141,6 +143,7 @@ def annotate_example_ws(example, table):
     except:
         ann['wvi_corenlp'] = None
         ann['tok_error'] = 'SQuAD style st, ed are not found under CoreNLP.'
+    '''
 
     return ann
 
@@ -167,9 +170,9 @@ def is_valid_example(e):
 
 if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--din', default='/home/sleeve/音乐/sqlova/data/WikiSQL', help='data directory')
-    parser.add_argument('--dout', default='/home/sleeve/音乐/sqlov/data/wikisql_tok', help='output directory')
-    parser.add_argument('--split', default='train,dev,test', help='comma=separated list of splits to process')
+    parser.add_argument('--din', default='/home/sleeve/桌面/TCwork_git/data/wikisql_tok1', help='data directory')
+    parser.add_argument('--dout', default='/home/sleeve/桌面/TCwork_git/data/wikisql_tok1/test_tok', help='output directory')
+    parser.add_argument('--split', default='test', help='comma=separated list of splits to process') #'train,dev,test'
     args = parser.parse_args()
 
     answer_toy = not True
