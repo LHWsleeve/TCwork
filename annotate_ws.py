@@ -13,7 +13,8 @@ from wikisql.lib.common import count_lines, detokenize
 from wikisql.lib.query import Query
 from fencibijiao import *
 # from HUADONG import *
-import datetime
+import time
+import multiprocessing as mp
 client = None
 
 
@@ -111,41 +112,47 @@ def check_wv_tok_in_nlu_tok(wv_tok1, nlu_t1):
     return g_wvi1_corenlp
 
 
-def annotate_example_ws(example, table):
+def annotate_example_ws(example, table, fout, cnt, start):
     """
     Jan. 2019: Wonseok
     Annotate only the information that will be used in our model.
     """
-    ann = {'table_id': example['table_id']}
-    _nlu_ann = annotate(example['question'])
-    ann['question'] = example['question']
-    ann['question_tok'] = _nlu_ann['gloss']
-    '''
-    训练集和验证集需要使用以下代码，测试集不需要
-    ann['table'] = {
-        'header': [annotate(h) for h in table['header']],
-    }
-    ann['sql'] = example['sql']
-    ann['query'] = sql = copy.deepcopy(example['sql'])
+    with open(fout, 'a+') as fo:
+        ann = {'table_id': example['table_id']}
+        _nlu_ann = annotate(example['question'])
+        ann['question'] = example['question']
+        ann['question_tok'] = _nlu_ann['gloss']
+        '''
+        训练集和验证集需要使用以下代码，测试集不需要
+        '''
 
-    conds1 = ann['sql']['conds']
-    wv_ann1 = []
-    for conds11 in conds1:
-        _wv_ann1 = annotate(str(conds11[2]))
-        wv_ann11 = _wv_ann1['gloss']
-        wv_ann1.append(wv_ann11)
+        # ann['table'] = {
+        #     'header': [annotate(h) for h in table['header']],
+        # }
+        ann['sql'] = example['sql']
+        ann['query'] = sql = copy.deepcopy(example['sql'])
 
-        # Check whether wv_ann exsits inside question_tok
+        conds1 = ann['sql']['conds']
+        wv_ann1 = []
+        for conds11 in conds1:
+            _wv_ann1 = annotate(str(conds11[2]))
+            wv_ann11 = _wv_ann1['gloss']
+            wv_ann1.append(wv_ann11)
 
-    try:
-        wvi1_corenlp = check_wv_tok_in_nlu_tok(wv_ann1, ann['question_tok'])
-        ann['wvi_corenlp'] = wvi1_corenlp
-    except:
-        ann['wvi_corenlp'] = None
-        ann['tok_error'] = 'SQuAD style st, ed are not found under CoreNLP.'
-    '''
+            # Check whether wv_ann exsits inside question_tok
 
-    return ann
+        try:
+            wvi1_corenlp = check_wv_tok_in_nlu_tok(wv_ann1, ann['question_tok'])
+            ann['wvi_corenlp'] = wvi1_corenlp
+        except:
+            print('gwvi索引出')
+            exit()
+
+        fo.write(json.dumps(ann) + '\n')
+        end = time.time()
+        print('任务 %d runs %0.2f seconds.' % (cnt,(end - start)))
+
+    # return ann
 
 
 def is_valid_example(e):
@@ -172,7 +179,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--din', default='/home/sleeve/桌面/TCwork_git/data/wikisql_tok1', help='data directory')
     parser.add_argument('--dout', default='/home/sleeve/桌面/TCwork_git/data/wikisql_tok1/test_tok', help='output directory')
-    parser.add_argument('--split', default='test', help='comma=separated list of splits to process') #'train,dev,test'
+    parser.add_argument('--split', default='train, dev'::q, help='comma=separated list of splits to process') #'train,dev,test'
     args = parser.parse_args()
 
     answer_toy = not True
@@ -199,15 +206,24 @@ if __name__ == '__main__':
             print('loading examples')
             n_written = 0
             cnt = -1
+
+            pool = mp.Pool(2)
             for line in tqdm(fs, total=count_lines(fsplit)):
+                start = time.time()
                 cnt += 1
                 d = json.loads(line)
                 # a = annotate_example(d, tables[d['table_id']])
-                a = annotate_example_ws(d, tables[d['table_id']])
-                fo.write(json.dumps(a) + '\n')
+                pool.apply_async(annotate_example_ws, (d, tables[d['table_id']], fout, cnt, start))
+                # a = annotate_example_ws(d, tables[d['table_id']])
+                # fo.write(json.dumps(a) + '\n')
                 n_written += 1
+            pool.close()
+            pool.join()
 
-                if answer_toy:
-                    if cnt > toy_size:
-                        break
+            print('任务结束')
+
+
+            if answer_toy:
+                if cnt > toy_size:
+                    break
             print('wrote {} examples'.format(n_written))
