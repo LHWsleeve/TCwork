@@ -2,11 +2,3 @@
 bert-utils/
 
 data/
-
-train_tok\.jsonl
-
-sqlnet/__pycache__/
-
-\.idea/
-
-__pycache__/
