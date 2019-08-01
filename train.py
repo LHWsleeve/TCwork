@@ -23,9 +23,8 @@ from sqlova.model.nl2sql.wikisql_models import *
 from sqlnet.dbengine import DBEngine
 from tqdm import trange
 
-import multiprocessing as mp
-import time, random, os
-from  Tread_run import *
+# import multiprocessing as mp
+from Tread_run import *
 
 # os.environ['CUDA_VISIBLE_DEVICES'] = '3'
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -212,9 +211,6 @@ def get_data(path_wikisql, args):
 def train(train_loader, train_table, model, model_bert, opt, bert_config, tokenizer,
           max_seq_length, num_target_layers, accumulate_gradients=1, check_grad=True,
           st_pos=0, opt_bert=None, path_db=None, dset_name='train'):
-
-    # mp.set_start_method('spawn')
-
     model.train()
     model_bert.train()
     badcase = 0
@@ -224,7 +220,7 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
     # Engine for SQL querying.
     # 这里别忘了改，引擎要变成新的
     engine = DBEngine(os.path.join(path_db, f"{dset_name}.db"))
-    now = datetime.datetime.now()
+    now = time.time()
     for iB, t in enumerate(train_loader):
         # t 是一个完整的tok文件
         cnt += len(t)
@@ -242,15 +238,15 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
         # sql_t: tokenized SQL query 分词的问题 = nlu_t
         # tb   : table
         # hs_t : tokenized headers. Not used.
-        #hds :   header
+        # hds :   header
 
         g_sc, g_sa, g_sop, g_wn, g_wc, g_wo, g_wv, g_sel_num_seq, g_sel_ag_seq, conds = get_g(sql_i)
         # g_sel_num_seq真实sel的个数
         # g_sel_ag_seq 包含一个元组，agg个数，sel实际值，agg实际值（list）
         # get ground truth where-value index under CoreNLP tokenization scheme. It's done already on trainset.
-        # 这里提取了语义索引
-        # g_wvi_corenlp = get_g_wvi_corenlp(t)
 
+        # 这里提取了语义索引
+        g_wvi_corenlp = get_g_wvi_corenlp(t)
 
         wemb_n, wemb_h, l_n, l_hpu, l_hs, \
         nlu_tt, t_to_tt_idx, tt_to_t_idx \
@@ -262,25 +258,24 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
         # l_n: token lengths of each question
         # l_hpu: header token lengths
         # l_hs: the number of columns (headers) of the tables.
-        # try:
-        #     #
-        #     g_wvi = get_g_wvi_bert_from_g_wvi_corenlp(t_to_tt_idx, g_wvi_corenlp)
-        # except:
-        #     continue
+        try:
+            g_wvi = get_g_wvi_bert_from_g_wvi_corenlp(t_to_tt_idx, g_wvi_corenlp)
+        except:
+            print('索引转值出错')
+            continue
 
         # score
-        # g_sel_seq = [x[1] for x in g_sel_ag_seq]
-        #g_sel_seq 和g_sc是一个东西，实际的列值
-
         s_scn, s_sc, s_sa, s_sop, s_wn, s_wc, s_wo, s_wv = model(wemb_n, l_n, wemb_h, l_hpu, l_hs,
-                                                                 g_scn = g_sel_num_seq, g_sc=g_sc, g_sa=g_sa,
-                                                                 g_wn=g_wn, g_wc=g_wc,g_sop=g_sop, g_wo=g_wo)
-        start = time.time()
-        g_wvi_corenlp = []
-        results = []
-        lenth = len(t)
+                                                                 g_scn=g_sel_num_seq, g_sc=g_sc, g_sa=g_sa,
+                                                                 g_wn=g_wn, g_wc=g_wc, g_sop=g_sop, g_wo=g_wo,
+                                                                 g_wvi=g_wvi)
 
-        #多进程部分
+        # start = time.time()
+        # results = []
+        # lenth = len(t)
+        # g_wvi_corenlp = []
+
+        # 多进程部分
         '''        
         manager = mp.Manager()
         dict = manager.dict()
@@ -299,31 +294,29 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
         print('runs %0.2f seconds.' % (end - start))
 
         '''
-        for x in range(len(conds)):
-            wv_ann1 = []
-            cond1 = conds[x]
-            nlu_1 = nlu_t[x]
-            for conds11 in cond1:
-                _wv_ann1 = annotate_ws.annotate(str(conds11[2]))
-                wv_ann11 = _wv_ann1['gloss']
-                wv_ann1.append(wv_ann11)
+        # 单进程部分
+        # for x in range(len(conds)):
+        #     wv_ann1 = []
+        #     cond1 = conds[x]
+        #     nlu_1 = nlu_t[x]
+        #     for conds11 in cond1:
+        #         _wv_ann1 = annotate_ws.annotate(str(conds11[2]))
+        #         wv_ann11 = _wv_ann1['gloss']
+        #         wv_ann1.append(wv_ann11)
+        #
+        #     try:
+        #         wvi1_corenlp = annotate_ws.check_wv_tok_in_nlu_tok(wv_ann1, nlu_1)
+        #         g_wvi_corenlp.append(wvi1_corenlp)
+        #     except:
+        #         print("gwvi构建失败")
+        #         print(nlu_1)
+        #         exit()
 
-            try:
-                wvi1_corenlp = annotate_ws.check_wv_tok_in_nlu_tok(wv_ann1, nlu_1)
-                g_wvi_corenlp.append(wvi1_corenlp)
-            except:
-                print("gwvi构建失败")
-                g_wvi_corenlp.append(None)
-                exit()
-            end = time.time()
-
-        print('runs %0.2f seconds.' % (end - start))
-
+        end = time.time()
+        print('runs %0.2f seconds.' % (end - now))
 
         loss = Loss_sw_se(s_scn, s_sc, s_sa, s_sop, s_wn, s_wc, s_wo, s_wv,
-                          g_sel_num_seq, g_sc, g_sa, g_sop, g_wn, g_wc, g_wo, g_wvi_corenlp)
-
-
+                          g_sel_num_seq, g_sc, g_sa, g_sop, g_wn, g_wc, g_wo, g_wvi)
 
         # Calculate gradient
         if iB % accumulate_gradients == 0:  # mode
@@ -349,57 +342,56 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
         # L = loss.item()
         ave_loss += loss.item()
 
-
-    return ave_loss/cnt
+    return ave_loss / cnt
 
 
 # return acc, aux_out
-
-def report_detail(hds, nlu,
-                  g_sc, g_sa, g_wn, g_wc, g_wo, g_wv, g_wv_str, g_sql_q, g_ans,
-                  pr_sc, pr_sa, pr_wn, pr_wc, pr_wo, pr_wv_str, pr_sql_q, pr_ans,
-                  cnt_list, current_cnt):
-    cnt_tot, cnt, cnt_sc, cnt_sa, cnt_wn, cnt_wc, cnt_wo, cnt_wv, cnt_wvi, cnt_lx, cnt_x = current_cnt
-
-    print(f'cnt = {cnt} / {cnt_tot} ===============================')
-
-    print(f'headers: {hds}')
-    print(f'nlu: {nlu}')
-
-    # print(f's_sc: {s_sc[0]}')
-    # print(f's_sa: {s_sa[0]}')
-    # print(f's_wn: {s_wn[0]}')
-    # print(f's_wc: {s_wc[0]}')
-    # print(f's_wo: {s_wo[0]}')
-    # print(f's_wv: {s_wv[0][0]}')
-    print(f'===============================')
-    print(f'g_sc : {g_sc}')
-    print(f'pr_sc: {pr_sc}')
-    print(f'g_sa : {g_sa}')
-    print(f'pr_sa: {pr_sa}')
-    print(f'g_wn : {g_wn}')
-    print(f'pr_wn: {pr_wn}')
-    print(f'g_wc : {g_wc}')
-    print(f'pr_wc: {pr_wc}')
-    print(f'g_wo : {g_wo}')
-    print(f'pr_wo: {pr_wo}')
-    print(f'g_wv : {g_wv}')
-    # print(f'pr_wvi: {pr_wvi}')
-    print('g_wv_str:', g_wv_str)
-    print('p_wv_str:', pr_wv_str)
-    print(f'g_sql_q:  {g_sql_q}')
-    print(f'pr_sql_q: {pr_sql_q}')
-    print(f'g_ans: {g_ans}')
-    print(f'pr_ans: {pr_ans}')
-    print(f'--------------------------------')
-
-    print(cnt_list)
-
-    print(f'acc_lx = {cnt_lx / cnt:.3f}, acc_x = {cnt_x / cnt:.3f}\n',
-          f'acc_sc = {cnt_sc / cnt:.3f}, acc_sa = {cnt_sa / cnt:.3f}, acc_wn = {cnt_wn / cnt:.3f}\n',
-          f'acc_wc = {cnt_wc / cnt:.3f}, acc_wo = {cnt_wo / cnt:.3f}, acc_wv = {cnt_wv / cnt:.3f}')
-    print(f'===============================')
-
+#
+# def report_detail(hds, nlu,
+#                   g_sc, g_sa, g_wn, g_wc, g_wo, g_wv, g_wv_str, g_sql_q, g_ans,
+#                   pr_sc, pr_sa, pr_wn, pr_wc, pr_wo, pr_wv_str, pr_sql_q, pr_ans,
+#                   cnt_list, current_cnt):
+#     cnt_tot, cnt, cnt_sc, cnt_sa, cnt_wn, cnt_wc, cnt_wo, cnt_wv, cnt_wvi, cnt_lx, cnt_x = current_cnt
+#
+#     print(f'cnt = {cnt} / {cnt_tot} ===============================')
+#
+#     print(f'headers: {hds}')
+#     print(f'nlu: {nlu}')
+#
+#     # print(f's_sc: {s_sc[0]}')
+#     # print(f's_sa: {s_sa[0]}')
+#     # print(f's_wn: {s_wn[0]}')
+#     # print(f's_wc: {s_wc[0]}')
+#     # print(f's_wo: {s_wo[0]}')
+#     # print(f's_wv: {s_wv[0][0]}')
+#     print(f'===============================')
+#     print(f'g_sc : {g_sc}')
+#     print(f'pr_sc: {pr_sc}')
+#     print(f'g_sa : {g_sa}')
+#     print(f'pr_sa: {pr_sa}')
+#     print(f'g_wn : {g_wn}')
+#     print(f'pr_wn: {pr_wn}')
+#     print(f'g_wc : {g_wc}')
+#     print(f'pr_wc: {pr_wc}')
+#     print(f'g_wo : {g_wo}')
+#     print(f'pr_wo: {pr_wo}')
+#     print(f'g_wv : {g_wv}')
+#     # print(f'pr_wvi: {pr_wvi}')
+#     print('g_wv_str:', g_wv_str)
+#     print('p_wv_str:', pr_wv_str)
+#     print(f'g_sql_q:  {g_sql_q}')
+#     print(f'pr_sql_q: {pr_sql_q}')
+#     print(f'g_ans: {g_ans}')
+#     print(f'pr_ans: {pr_ans}')
+#     print(f'--------------------------------')
+#
+#     print(cnt_list)
+#
+#     print(f'acc_lx = {cnt_lx / cnt:.3f}, acc_x = {cnt_x / cnt:.3f}\n',
+#           f'acc_sc = {cnt_sc / cnt:.3f}, acc_sa = {cnt_sa / cnt:.3f}, acc_wn = {cnt_wn / cnt:.3f}\n',
+#           f'acc_wc = {cnt_wc / cnt:.3f}, acc_wo = {cnt_wo / cnt:.3f}, acc_wv = {cnt_wv / cnt:.3f}')
+#     print(f'===============================')
+#
 
 def test(data_loader, data_table, model, model_bert, bert_config, tokenizer,
          max_seq_length,
@@ -408,12 +400,11 @@ def test(data_loader, data_table, model, model_bert, bert_config, tokenizer,
     model.eval()
     model_bert.eval()
 
-
     cnt = 0
 
     engine = DBEngine(os.path.join(path_db, f"{dset_name}.db"))
     results = []
-    sql_all = badcase = total = 0
+    total = 0
     one_acc_num, tot_acc_num, ex_acc_num = 0.0, 0.0, 0.0
     for iB, t in enumerate(data_loader):
 
@@ -423,86 +414,34 @@ def test(data_loader, data_table, model, model_bert, bert_config, tokenizer,
         # Get fields
         nlu, nlu_t, sql_i, sql_t, tb, hs_t, hds = get_fields(t, data_table, no_hs_t=True, no_sql_t=True)
 
-        # g_sc, g_sa, g_sop, g_wn, g_wc, g_wo, g_wv, g_sel_num_seq, g_sel_ag_seq = get_g(sql_i)
         g_sc, g_sa, g_sop, g_wn, g_wc, g_wo, g_wv, g_sel_num_seq, g_sel_ag_seq, conds = get_g(sql_i)
 
-        # g_wvi_corenlp = get_g_wvi_corenlp(t)
+        g_wvi_corenlp = get_g_wvi_corenlp(t)
 
         wemb_n, wemb_h, l_n, l_hpu, l_hs, \
         nlu_tt, t_to_tt_idx, tt_to_t_idx \
             = get_wemb_bert(bert_config, model_bert, tokenizer, nlu_t, hds, max_seq_length,
                             num_out_layers_n=num_target_layers, num_out_layers_h=num_target_layers)
 
-        # g_wvi_corenlp = []
-        # results = []
-        # for x in range(len(conds)):
-        #     wv_ann1 = []
-        #     cond1 = conds[x]
-        #     nlu_1 = nlu_t[x]
-        #     for conds11 in cond1:
-        #         _wv_ann1 = annotate_ws.annotate(str(conds11[2]))
-        #         wv_ann11 = _wv_ann1['gloss']
-        #         wv_ann1.append(wv_ann11)
-        #
-        #     try:
-        #         wvi1_corenlp = annotate_ws.check_wv_tok_in_nlu_tok(wv_ann1, nlu_1)
-        #         g_wvi_corenlp.append(wvi1_corenlp)
-        #     except:
-        #         print("gwvi构建失败")
-        #         g_wvi_corenlp.append(None)
-        #         exit()
-
-        # try:
-        #     g_wvi = get_g_wvi_bert_from_g_wvi_corenlp(t_to_tt_idx, g_wvi_corenlp)
-        #     g_wv_str, g_wv_str_wp = convert_pr_wvi_to_string(g_wvi, nlu_t, nlu_tt, tt_to_t_idx, nlu)
-        #
-        # except:
-        #     # Exception happens when where-condition is not found in nlu_tt.
-        #     # In this case, that train example is not used.
-        #     # During test, that example considered as wrongly answered.
-        #     for b in range(len(nlu)):
-        #         results1 = {}
-        #         results1["error"] = "Skip happened"
-        #         results1["nlu"] = nlu[b]
-        #         results1["table_id"] = tb[b]["id"]
-        #         results.append(results1)
-        #     continue
+        try:
+            g_wvi = get_g_wvi_bert_from_g_wvi_corenlp(t_to_tt_idx, g_wvi_corenlp)
+        except:
+            # Exception happens when where-condition is not found in nlu_tt.
+            # In this case, that train example is not used.
+            # During test, that example considered as wrongly answered.
+            for b in range(len(nlu)):
+                results1 = {}
+                results1["error"] = "Skip happened"
+                results1["nlu"] = nlu[b]
+                results1["table_id"] = tb[b]["id"]
+                results.append(results1)
+            continue
 
         # model specific part
         # score
         if not EG:
             # No Execution guided decoding
-            # g_sel_seq = [x[1] for x in g_sel_ag_seq]
-            s_scn, s_sc, s_sa, s_sop, s_wn, s_wc, s_wo, s_wv = model(wemb_n, l_n, wemb_h, l_hpu, l_hs,
-                                                                     g_scn=g_sel_num_seq, g_sc=g_sc, g_sa=g_sa,
-                                                                     g_wn=g_wn, g_wc=g_wc, g_sop=g_sop, g_wo=g_wo)
-
-            # get loss & step
-            # loss = Loss_sw_se(s_scn, s_sc, s_sa, s_sop, s_wn, s_wc, s_wo, s_wv,
-            #                   g_sel_num_seq, g_sc, g_sa, g_sop, g_wn, g_wc, g_wo, g_wvi_corenlp)
-
-            # accumulate_gradients = 1
-            # if iB % accumulate_gradients == 0:  # mode
-            #     # at start, perform zero_grad
-            #     opt.zero_grad()
-            #     if opt_bert:
-            #         opt_bert.zero_grad()
-            #     loss.backward()
-            #     if accumulate_gradients == 1:
-            #         opt.step()
-            #         if opt_bert:
-            #             opt_bert.step()
-            # elif iB % accumulate_gradients == (accumulate_gradients - 1):
-            #     # at the final, take step with accumulated graident
-            #     loss.backward()
-            #     opt.step()
-            #     if opt_bert:
-            #         opt_bert.step()
-            # else:
-            #     # at intermediate stage, just accumulates the gradients
-            #     loss.backward()
-
-            # loss = Loss_sw_se(s_sc, s_sa, s_wn, s_wc, s_wo, s_wv, g_sc, g_sa, g_wn, g_wc, g_wo, g_wvi)
+            s_scn, s_sc, s_sa, s_sop, s_wn, s_wc, s_wo, s_wv = model(wemb_n, l_n, wemb_h, l_hpu, l_hs)
 
             # prediction
             score = []
@@ -530,10 +469,6 @@ def test(data_loader, data_table, model, model_bert, bert_config, tokenizer,
             pr_wc, pr_wo, pr_wv, pr_sql_i = sort_and_generate_pr_w(pr_sql_i)
 
             # Follosing variables are just for the consistency with no-EG case.
-            pr_wvi = None  # not used
-            pr_wv_str = None
-            pr_wv_str_wp = None
-            loss = torch.tensor([0])
 
         # # Saving for the official evaluation later.
         for b, pr_sql_i1 in enumerate(pr_sql_i):
@@ -543,68 +478,12 @@ def test(data_loader, data_table, model, model_bert, bert_config, tokenizer,
             results1["nlu"] = nlu[b]
             results.append(results1)
 
-        #     cnt_sc1_list, cnt_sa1_list, cnt_wn1_list, \
-        #     cnt_wc1_list, cnt_wo1_list, \
-        #     cnt_wvi1_list, cnt_wv1_list = get_cnt_sw_list(g_sc, g_sa,g_wn, g_wc,g_wo, g_wvi,
-        #                                                                pr_sc, pr_sa, pr_wn, pr_wc, pr_wo, pr_wvi,
-        #                                                                sql_i, pr_sql_i,
-        #                                                                mode='test')
-        #
-        #     cnt_lx1_list = get_cnt_lx_list(cnt_sc1_list, cnt_sa1_list, cnt_wn1_list, cnt_wc1_list,
-        #                                    cnt_wo1_list, cnt_wv1_list)
-        #
-        #     # Execution accura y test
-        #     cnt_x1_list = []
-        #     # lx stands for logical form accuracy
-        #
-        #     # Execution accuracy test.
-        #     cnt_x1_list, g_ans, pr_ans = get_cnt_x_list(engine, tb, g_sc, g_sa, sql_i, pr_sc, pr_sa, pr_sql_i)
-        #
-        #     # stat
-        #     ave_loss += loss.item()
-        #
-        #     # count
-        #     cnt_sc += sum(cnt_sc1_list)
-        #     cnt_sa += sum(cnt_sa1_list)
-        #     cnt_wn += sum(cnt_wn1_list)
-        #     cnt_wc += sum(cnt_wc1_list)
-        #     cnt_wo += sum(cnt_wo1_list)
-        #     cnt_wv += sum(cnt_wv1_list)
-        #     cnt_wvi += sum(cnt_wvi1_list)
-        #     cnt_lx += sum(cnt_lx1_list)
-        #     cnt_x += sum(cnt_x1_list)
-        #
-        #     current_cnt = [cnt_tot, cnt, cnt_sc, cnt_sa, cnt_wn, cnt_wc, cnt_wo, cnt_wv, cnt_wvi, cnt_lx, cnt_x]
-        #     cnt_list1 = [cnt_sc1_list, cnt_sa1_list, cnt_wn1_list, cnt_wc1_list, cnt_wo1_list, cnt_wv1_list, cnt_lx1_list,
-        #                  cnt_x1_list]
-        #     cnt_list.append(cnt_list1)
-        #     # report
-        #     if detail:
-        #         report_detail(hds, nlu,
-        #                       g_sc, g_sa, g_wn, g_wc, g_wo, g_wv, g_wv_str, g_sql_q, g_ans,
-        #                       pr_sc, pr_sa, pr_wn, pr_wc, pr_wo, pr_wv_str, pr_sql_q, pr_ans,
-        #                       cnt_list1, current_cnt)
-        #
-        # ave_loss /= cnt
-        # acc_sc = cnt_sc / cnt
-        # acc_sa = cnt_sa / cnt
-        # acc_wn = cnt_wn / cnt
-        # acc_wc = cnt_wc / cnt
-        # acc_wo = cnt_wo / cnt
-        # acc_wvi = cnt_wvi / cnt
-        # acc_wv = cnt_wv / cnt
-        # acc_lx = cnt_lx / cnt
-        # acc_x = cnt_x / cnt
-        #
-        # acc = [ave_loss, acc_sc, acc_sa, acc_wn, acc_wc, acc_wo, acc_wvi, acc_wv, acc_lx, acc_x]
         one_err, tot_err = model.check_acc(nlu, pr_sql_i, sql_i)
         one_acc_num += (len(pr_sql_i) - one_err)
         tot_acc_num += (len(pr_sql_i) - tot_err)
         total += len(pr_sql_i)
 
-
-
-    # Execution Accuracy
+        # Execution Accuracy
         table_ids = []
         for x in range(len(tb)):
             table_ids.append(tb[x]['id'])
@@ -632,6 +511,7 @@ def print_result(epoch, acc, dname):
 
 
 if __name__ == '__main__':
+    # mp.set_start_method('spawn')
 
     ## 1. Hyper parameters
     parser = argparse.ArgumentParser()
@@ -678,19 +558,19 @@ if __name__ == '__main__':
         print('完整训练次数:', epoch)
         # train
         train_loss = train(train_loader,
-                        train_table,
-                        model,
-                        model_bert,
-                        opt,
-                        bert_config,
-                        tokenizer,
-                        args.max_seq_length,
-                        args.num_target_layers,
-                        args.accumulate_gradients,
-                        opt_bert=opt_bert,
-                        st_pos=0,
-                        path_db=path_wikisql,
-                        dset_name='train')
+                           train_table,
+                           model,
+                           model_bert,
+                           opt,
+                           bert_config,
+                           tokenizer,
+                           args.max_seq_length,
+                           args.num_target_layers,
+                           args.accumulate_gradients,
+                           opt_bert=opt_bert,
+                           st_pos=0,
+                           path_db=path_wikisql,
+                           dset_name='train')
 
         # check DEV
         with torch.no_grad():
@@ -770,21 +650,20 @@ if __name__ == '__main__':
             pass
 
     # save results for the official evaluation
-        # save_for_evaluation(path_save_for_evaluation, results_dev, 'dev')
+    # save_for_evaluation(path_save_for_evaluation, results_dev, 'dev')
 
-
-        #
-        # # save best model
-        # # Based on Dev Set logical accuracy lx
-        # acc_lx_t = acc_dev[-2]
-        # if acc_lx_t > acc_lx_t_best:
-        #     acc_lx_t_best = acc_lx_t
-        #     epoch_best = epoch
-        #     # save best model
-        #     state = {'model': model.state_dict()}
-        #     torch.save(state, os.path.join('.', 'model_best.pt') )
-        #
-        #     state = {'model_bert': model_bert.state_dict()}
-        #     torch.save(state, os.path.join('.', 'model_bert_best.pt'))
-        #
-        # print(f" Best Dev lx acc: {acc_lx_t_best} at epoch: {epoch_best}")
+    #
+    # # save best model
+    # # Based on Dev Set logical accuracy lx
+    # acc_lx_t = acc_dev[-2]
+    # if acc_lx_t > acc_lx_t_best:
+    #     acc_lx_t_best = acc_lx_t
+    #     epoch_best = epoch
+    #     # save best model
+    #     state = {'model': model.state_dict()}
+    #     torch.save(state, os.path.join('.', 'model_best.pt') )
+    #
+    #     state = {'model_bert': model_bert.state_dict()}
+    #     torch.save(state, os.path.join('.', 'model_bert_best.pt'))
+    #
+    # print(f" Best Dev lx acc: {acc_lx_t_best} at epoch: {epoch_best}")
