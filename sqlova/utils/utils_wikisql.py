@@ -908,7 +908,7 @@ def pred_sc(s_sc):
     # get g_num
     pr_sc = []
     for s_sc1 in s_sc:
-        pr_sc.append(s_sc1.argmax().item())
+        pr_sc.append([s_sc1.argmax().item()]) #要返回一个二维数组，我自己加了一个[]，源代码没有，暂时不知哪里出现维度错误
 
     return pr_sc
 
@@ -945,7 +945,7 @@ def pred_wn(s_wn):
     # get g_num
     pr_wn = []
     for s_wn1 in s_wn:
-        pr_wn.append(s_wn1.argmax().item())
+        pr_wn.append(s_wn1.argmax().item()) #要返回二维数组，不确定哪里维度出错
         # print(pr_wn, s_wn1)
         # if s_wn1.argmax().item() == 3:
         #     input('')
@@ -2438,7 +2438,7 @@ def sort_pr_wc(pr_wc, g_wc):
     return pr_wc_sorted
 
 
-def get_g_wvi_corenlp(gt_where_seq):
+def get_g_wvi_corenlp_gt(gt_where_seq):
     gt = []
     for b in range(len(gt_where_seq)):
         gt1 = []

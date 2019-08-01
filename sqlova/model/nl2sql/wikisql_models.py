@@ -44,7 +44,7 @@ class Seq2SQL_v1(nn.Module):
         self.wvp = WVP_se(iS, hS, lS, dr, n_cond_ops, old=old) # start-end-search-discriminative model \ 预测Where-Value
 
     def forward(self, wemb_n, l_n, wemb_hpu, l_hpu, l_hs,
-                g_scn = None, g_sc=None, g_sa=None,  g_sop=None,g_wn=None, g_wc=None, g_wo=None,
+                g_scn = None, g_sc=None, g_sa=None,  g_sop=None,g_wn=None, g_wc=None, g_wo=None, g_wvi=None,
                 show_p_sc=False, show_p_sa=False,
                 show_p_wn=False, show_p_wc=False,
                 show_p_wo=False, show_p_wv=False):
@@ -59,10 +59,7 @@ class Seq2SQL_v1(nn.Module):
         if g_scn:
             pr_scn = g_scn
         else:
-            print('没有g_scn,并且出错')
-            print(g_scn)
-            print(s_scn)
-            exit()
+            print('g_scn dev/test不监督')
 
         # sc 预测sel第几列
         s_sc = self.scp(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num)
@@ -94,8 +91,7 @@ class Seq2SQL_v1(nn.Module):
             pr_wn = g_wn
         else:
             pr_wn = pred_wn(s_wn)
-            print("wn 没有给实际值")
-            exit()
+            print("wn dev/test不监督")
 
         # wc
         s_wc = self.wcp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, show_p_wc=show_p_wc, penalty=True)
@@ -104,8 +100,7 @@ class Seq2SQL_v1(nn.Module):
             pr_wc = g_wc
         else:
             pr_wc = pred_wc(pr_wn, s_wc)
-            print("wc 没有给实际值")
-            exit()
+            print("wc dev/test不监督")
 
         # wo
         s_wo = self.wop(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, wn=pr_wn, wc=pr_wc, show_p_wo=show_p_wo)
@@ -114,8 +109,7 @@ class Seq2SQL_v1(nn.Module):
             pr_wo = g_wo
         else:
             pr_wo = pred_wo(pr_wn, s_wo)
-            print("wo 没有给实际值")
-            exit()
+            print("wo dev/test不监督")
         # wv
         s_wv = self.wvp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, wn=pr_wn, wc=pr_wc, wo=pr_wo, show_p_wv=show_p_wv)
 
