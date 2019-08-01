@@ -280,21 +280,25 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
         results = []
         lenth = len(t)
 
-        # manager = mp.Manager()
-        # dict = manager.dict()
-        # pool = mp.Pool(32)
-        # for x in range(lenth):
-        #
-        #     pool.apply_async(gwvi, (dict, x, conds[x], nlu_t[x]))
-        #
-        # pool.close()
-        # pool.join()
-        #
-        # for idx in range(lenth):
-        #     g_wvi_corenlp.append(dict[idx])
-        #
-        # end = time.time()
-        # print('runs %0.2f seconds.' % (end - start))
+        #多进程部分
+        '''        
+        manager = mp.Manager()
+        dict = manager.dict()
+        pool = mp.Pool(32)
+        for x in range(lenth):
+
+            pool.apply_async(gwvi, (dict, x, conds[x], nlu_t[x]))
+
+        pool.close()
+        pool.join()
+
+        for idx in range(lenth):
+            g_wvi_corenlp.append(dict[idx])
+
+        end = time.time()
+        print('runs %0.2f seconds.' % (end - start))
+
+        '''
         for x in range(len(conds)):
             wv_ann1 = []
             cond1 = conds[x]

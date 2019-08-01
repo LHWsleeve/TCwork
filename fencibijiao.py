@@ -32,7 +32,9 @@ def Encode(wv_tok,nlu_t1):
 
         if nlu_t1 is None or size > len(nlu_t1) or size == 0:
             print("滑动窗口出错")
-            exit()
+            print(nlu_t1)
+            print(size)
+            break
         for i in range(len(nlu_t1) - size + 1):
 
             size_b1 = ''.join(nlu_t1[i:i + size]) #滑动size加入列表 i是起始索引，i+size是结束索引
