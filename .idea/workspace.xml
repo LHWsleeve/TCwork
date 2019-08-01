@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34129973-5042-4167-8717-eec2cdb70e72" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bert-utils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/bert-utils/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fencibijiao.py" beforeDir="false" afterPath="$PROJECT_DIR$/fencibijiao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sqlova/model/nl2sql/wikisql_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/sqlova/model/nl2sql/wikisql_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sqlova/utils/utils_wikisql.py" beforeDir="false" afterPath="$PROJECT_DIR$/sqlova/utils/utils_wikisql.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,13 +34,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="534">
-              <caret line="300" column="11" lean-forward="true" selection-start-line="300" selection-start-column="11" selection-end-line="300" selection-end-column="11" />
+            <state relative-caret-position="-318">
+              <caret line="486" selection-start-line="486" selection-end-line="486" />
               <folding>
                 <element signature="e#127#161#0" expanded="true" />
+                <element signature="e#11083#11104#0" />
+                <element signature="e#11252#11662#1" />
+                <element signature="e#11658#11665#0" />
+                <element signature="e#13346#13367#0" />
               </folding>
             </state>
           </provider>
@@ -47,22 +53,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sqlova/utils/utils_wikisql.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="1710" selection-start-line="1710" selection-end-line="1710" />
+            <state relative-caret-position="186">
+              <caret line="1707" selection-start-line="1707" selection-end-line="1707" />
               <folding>
                 <element signature="e#113#128#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Tread_run.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
-              <caret line="43" column="25" selection-start-line="43" selection-start-column="25" selection-end-line="43" selection-end-column="25" />
-              <folding>
-                <element signature="e#96#121#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -71,50 +65,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fencibijiao.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="35" column="23" lean-forward="true" selection-start-line="35" selection-start-column="23" selection-end-line="35" selection-end-column="23" />
-              <folding>
-                <element signature="e#0#42#0" expanded="true" />
-              </folding>
+            <state>
+              <caret column="32" selection-start-column="32" selection-end-column="32" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mythread.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/multiprocessing/pool.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8208">
-              <caret line="353" selection-start-line="353" selection-end-line="353" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/annotate_ws.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="107" column="24" lean-forward="true" selection-start-line="107" selection-start-column="21" selection-end-line="107" selection-end-column="27" />
-              <folding>
-                <element signature="e#146#212#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sqlova/model/nl2sql/wikisql_models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11400">
-              <caret line="482" selection-start-line="482" selection-end-line="482" />
+            <state relative-caret-position="262">
+              <caret line="61" column="47" lean-forward="true" selection-start-line="61" selection-start-column="47" selection-end-line="61" selection-end-column="47" />
               <folding>
                 <element signature="e#113#128#0" expanded="true" />
               </folding>
@@ -123,10 +84,34 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/numpy/core/fromnumeric.py">
+        <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/torch/nn/functional.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="26136">
-              <caret line="1102" selection-start-line="1102" selection-end-line="1102" />
+            <state relative-caret-position="195">
+              <caret line="2055" selection-start-line="2055" selection-end-line="2055" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sqlova/model/nl2sql/net_utils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/annotate_ws.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="354">
+              <caret line="151" column="25" selection-start-line="151" selection-start-column="14" selection-end-line="151" selection-end-column="25" />
+              <folding>
+                <element signature="e#146#212#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -142,11 +127,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>sel_num_col2hid1</find>
-      <find>s_sc</find>
-      <find>nul_tt</find>
-      <find>mL_w</find>
-      <find>输出是4</find>
       <find>cond_pred</find>
       <find>Batch_size</find>
       <find>dev_loader</find>
@@ -171,7 +151,12 @@
       <find>model_bert</find>
       <find>BertConfig</find>
       <find>BERT_PT_PATH</find>
+      <find>query</find>
       <find>train_loader</find>
+      <find>mp</find>
+      <find>get_g_wvi_corenlp</find>
+      <find>gt_where_seq</find>
+      <find>gt_sel</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -185,27 +170,27 @@
       <list>
         <option value="$PROJECT_DIR$/123.py" />
         <option value="$APPLICATION_HOME_DIR$/helpers/pydev/_pydevd_bundle/pydevd_comm.py" />
-        <option value="$PROJECT_DIR$/sqlnet/dbengine.py" />
         <option value="$PROJECT_DIR$/predict.py" />
         <option value="$PROJECT_DIR$/sqlova/model/nl2sql/net_utils.py" />
         <option value="$PROJECT_DIR$/123test.py" />
-        <option value="$PROJECT_DIR$/sqlova/model/nl2sql/wikisql_models.py" />
         <option value="$PROJECT_DIR$/bert-utils/__init__.py" />
         <option value="$PROJECT_DIR$/HUADONG.py" />
-        <option value="$PROJECT_DIR$/annotate_ws.py" />
         <option value="$PROJECT_DIR$/mythread.py" />
         <option value="$PROJECT_DIR$/Tread_run.py" />
-        <option value="$PROJECT_DIR$/sqlova/utils/utils_wikisql.py" />
         <option value="$PROJECT_DIR$/fencibijiao.py" />
+        <option value="$PROJECT_DIR$/sqlnet/dbengine.py" />
+        <option value="$PROJECT_DIR$/annotate_ws.py" />
+        <option value="$PROJECT_DIR$/sqlova/utils/utils_wikisql.py" />
         <option value="$PROJECT_DIR$/train.py" />
+        <option value="$PROJECT_DIR$/sqlova/model/nl2sql/wikisql_models.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-36" />
-    <option name="y" value="159" />
-    <option name="width" value="1717" />
-    <option name="height" value="1080" />
+    <option name="x" value="207" />
+    <option name="y" value="380" />
+    <option name="width" value="1713" />
+    <option name="height" value="981" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -213,6 +198,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -224,13 +210,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../源sqlova" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
@@ -248,7 +233,7 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.train">
-    <configuration name="123test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="annotate_ws (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="sqlova" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -256,12 +241,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../源sqlova" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/fencibijiao.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../源sqlova/annotate_ws.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -270,7 +255,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="HUADONG" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="annotate_ws (2)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="sqlova" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -278,12 +263,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/多进程原版shiping_sqlova/sqlova" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Tread_run.py" />
+      <option name="SCRIPT_NAME" value="$USER_HOME$/多进程原版shiping_sqlova/sqlova/annotate_ws.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -350,7 +335,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/train.py" />
-      <option name="PARAMETERS" value="--seed 1 --bS 2 --accumulate_gradients 2 --bert_type_abb chinese --fine_tune --lr 0.001 --lr_bert 0.00001 --max_seq_leng 250" />
+      <option name="PARAMETERS" value="--seed 1 --bS 4 --accumulate_gradients 2 --bert_type_abb chinese --fine_tune --lr 0.001 --lr_bert 0.00001 --max_seq_leng 250" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -360,18 +345,18 @@
     </configuration>
     <list>
       <item itemvalue="Python.train" />
-      <item itemvalue="Python.123test" />
       <item itemvalue="Python.annotate_ws" />
-      <item itemvalue="Python.HUADONG" />
       <item itemvalue="Python.mythread" />
+      <item itemvalue="Python.annotate_ws (1)" />
+      <item itemvalue="Python.annotate_ws (2)" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.train" />
-        <item itemvalue="Python.mythread" />
-        <item itemvalue="Python.HUADONG" />
-        <item itemvalue="Python.123test" />
         <item itemvalue="Python.annotate_ws" />
+        <item itemvalue="Python.annotate_ws (2)" />
+        <item itemvalue="Python.annotate_ws (1)" />
+        <item itemvalue="Python.mythread" />
       </list>
     </recent_temporary>
   </component>
@@ -393,12 +378,13 @@
       <workItem from="1563952251527" duration="138816000" />
       <workItem from="1564559253984" duration="8881000" />
       <workItem from="1564622614772" duration="1471000" />
-      <workItem from="1564624456877" duration="3116000" />
+      <workItem from="1564624456877" duration="10407000" />
+      <workItem from="1564644359481" duration="16386000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="257628000" />
+    <option name="totallyTimeSpent" value="281305000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -413,13 +399,13 @@
     <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.44011977" weight="0.12660256" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.44011977" visible="true" weight="0.12820514" />
       <window_info id="Structure" order="1" sideWeight="0.55988026" side_tool="true" weight="0.30674517" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49946466" weight="0.2196162" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946466" weight="0.2964135" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49946466" visible="true" weight="0.35232067" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946466" weight="0.25949368" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49946466" visible="true" weight="0.35126582" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32942432" />
@@ -434,7 +420,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" weight="0.32922912" />
-      <window_info anchor="right" id="SciView" order="4" weight="0.3681073" />
+      <window_info anchor="right" id="SciView" order="4" weight="0.36805555" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -444,13 +430,8 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train.py</url>
-          <line>529</line>
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/sqlova/model/nl2sql/wikisql_models.py</url>
-          <line>277</line>
+          <line>276</line>
           <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -460,38 +441,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/train.py</url>
-          <line>620</line>
+          <line>512</line>
           <option name="timeStamp" value="256" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/annotate_ws.py</url>
-          <line>126</line>
-          <option name="timeStamp" value="339" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/annotate_ws.py</url>
-          <line>131</line>
-          <option name="timeStamp" value="345" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/train.py</url>
-          <line>718</line>
+          <line>611</line>
           <option name="timeStamp" value="432" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train.py</url>
-          <line>322</line>
-          <option name="timeStamp" value="440" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train.py</url>
-          <line>295</line>
-          <option name="timeStamp" value="442" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train.py</url>
-          <line>289</line>
-          <option name="timeStamp" value="444" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/mythread.py</url>
@@ -508,6 +464,26 @@
           <line>33</line>
           <option name="timeStamp" value="448" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/annotate_ws.py</url>
+          <line>32</line>
+          <option name="timeStamp" value="454" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/多进程原版shiping_sqlova/sqlova/annotate_ws.py</url>
+          <line>203</line>
+          <option name="timeStamp" value="486" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/多进程原版shiping_sqlova/sqlova/annotate_ws.py</url>
+          <line>144</line>
+          <option name="timeStamp" value="487" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/annotate_ws.py</url>
+          <line>150</line>
+          <option name="timeStamp" value="488" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -519,60 +495,21 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/sqlova$HUADONG.coverage" NAME="HUADONG Coverage Results" MODIFIED="1564561400133" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/TCwork_git$annotate_ws.coverage" NAME="annotate_ws Coverage Results" MODIFIED="1564651714114" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/sqlova$mythread.coverage" NAME="mythread Coverage Results" MODIFIED="1564563130056" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/sqlova$utils_wikisql.coverage" NAME="utils_wikisql Coverage Results" MODIFIED="1563938111737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/sqlova/utils" />
     <SUITE FILE_PATH="coverage/sqlova$predict.coverage" NAME="predict Coverage Results" MODIFIED="1564025328491" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/sqlova$123test.coverage" NAME="123test Coverage Results" MODIFIED="1564470681173" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/TCwork_git$train.coverage" NAME="train Coverage Results" MODIFIED="1564626294214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/TCwork_git$train.coverage" NAME="train Coverage Results" MODIFIED="1564669763125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/TCwork_git$annotate_ws__1_.coverage" NAME="annotate_ws (1) Coverage Results" MODIFIED="1564651050196" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../源sqlova" />
+    <SUITE FILE_PATH="coverage/TCwork_git$annotate_ws__2_.coverage" NAME="annotate_ws (2) Coverage Results" MODIFIED="1564651144877" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/多进程原版shiping_sqlova/sqlova" />
+    <SUITE FILE_PATH="coverage/sqlova$HUADONG.coverage" NAME="HUADONG Coverage Results" MODIFIED="1564561400133" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/sqlova$train.coverage" NAME="train Coverage Results" MODIFIED="1564567004536" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/sqlova$123.coverage" NAME="123 Coverage Results" MODIFIED="1562934960918" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/sqlova$wikisql_models.coverage" NAME="wikisql_models Coverage Results" MODIFIED="1563869583249" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/sqlova/model/nl2sql" />
     <SUITE FILE_PATH="coverage/sqlova$annotate_ws.coverage" NAME="annotate_ws Coverage Results" MODIFIED="1564452463543" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/multiprocessing/queues.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="197" selection-start-line="197" selection-end-line="197" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/multiprocessing/connection.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="178" selection-start-line="178" selection-end-line="178" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/torch/nn/utils/rnn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="79">
-          <caret line="220" column="30" selection-start-line="220" selection-start-column="25" selection-end-line="220" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/torch/__init__.pyi">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="412">
-          <caret line="1520" column="6" selection-start-line="1520" selection-start-column="6" selection-end-line="1520" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/sqlalchemy/engine/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="1332" selection-start-line="1332" selection-end-line="1332" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/sqlalchemy/engine/result.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="947" selection-start-line="947" selection-end-line="947" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/sqlalchemy/sql/sqltypes.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="186">
@@ -598,13 +535,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="10056">
           <caret line="428" selection-start-line="428" selection-end-line="428" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/records.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4464">
-          <caret line="194" selection-start-line="194" selection-end-line="194" />
         </state>
       </provider>
     </entry>
@@ -636,13 +566,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/predict.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1310">
-          <caret line="208" lean-forward="true" selection-start-line="208" selection-end-line="208" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/1001261760/numpy/core/_multiarray_umath.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="230">
@@ -650,22 +573,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/torch/nn/modules/module.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="492" selection-start-line="492" selection-end-line="492" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sqlova/model/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sqlova/model/nl2sql/net_utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="12" selection-start-column="12" selection-end-column="12" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sqlova/model/nl2sql/wikisql_models源.py">
       <provider selected="true" editor-type-id="text-editor" />
@@ -712,13 +621,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/torch/nn/functional.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="1866" column="30" selection-start-line="1866" selection-start-column="24" selection-end-line="1866" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/matplotlib/pyplot.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
@@ -733,13 +635,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="308" selection-start-line="308" selection-end-line="308" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/sklearn/metrics/pairwise.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
@@ -751,16 +646,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="311" column="23" lean-forward="true" selection-start-line="311" selection-start-column="23" selection-end-line="311" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sqlnet/dbengine.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-          <folding>
-            <element signature="e#59#73#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -814,40 +699,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/multiprocessing/pool.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8208">
-          <caret line="353" selection-start-line="353" selection-end-line="353" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sqlova/model/nl2sql/wikisql_models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11400">
-          <caret line="482" selection-start-line="482" selection-end-line="482" />
-          <folding>
-            <element signature="e#113#128#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/numpy/core/fromnumeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="26136">
-          <caret line="1102" selection-start-line="1102" selection-end-line="1102" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sqlova/utils/utils_wikisql.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="1710" selection-start-line="1710" selection-end-line="1710" />
-          <folding>
-            <element signature="e#113#128#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Tread_run.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="366">
@@ -858,32 +709,164 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/predict.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3326">
+          <caret line="208" lean-forward="true" selection-start-line="208" selection-end-line="208" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/records.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="253" column="8" selection-start-line="253" selection-start-column="8" selection-end-line="253" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sqlnet/dbengine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="21" column="61" lean-forward="true" selection-start-line="21" selection-start-column="61" selection-end-line="21" selection-end-column="61" />
+          <folding>
+            <element signature="e#59#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7392">
+          <caret line="308" selection-start-line="308" selection-end-line="308" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/multiprocessing/pool.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="357" selection-start-line="357" selection-end-line="357" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/stanza/nlp/corenlp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="44" selection-start-line="44" selection-end-line="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../源sqlova/annotate_ws.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1641">
+          <caret line="115" column="16" lean-forward="true" selection-start-line="115" selection-start-column="16" selection-end-line="115" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3/time.pyi">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="18" column="18" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/多进程原版shiping_sqlova/sqlova/annotate_ws.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="545">
+          <caret line="144" selection-start-line="144" selection-end-line="144" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/tqdm/_tqdm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="963" selection-start-line="963" selection-end-line="963" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fencibijiao.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="35" column="23" lean-forward="true" selection-start-line="35" selection-start-column="23" selection-end-line="35" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="32" selection-start-column="32" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wikisql/lib/common.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="48">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/annotate_ws.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="107" column="24" lean-forward="true" selection-start-line="107" selection-start-column="21" selection-end-line="107" selection-end-column="27" />
+        <state relative-caret-position="354">
+          <caret line="151" column="25" selection-start-line="151" selection-start-column="14" selection-end-line="151" selection-end-column="25" />
           <folding>
             <element signature="e#146#212#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/torch/nn/modules/module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="492" selection-start-line="492" selection-end-line="492" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sqlova/model/nl2sql/net_utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/numpy/core/fromnumeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="1033" selection-start-line="1033" selection-end-line="1033" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.conda/envs/pt36/lib/python3.6/site-packages/torch/nn/functional.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="2055" selection-start-line="2055" selection-end-line="2055" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="300" column="11" lean-forward="true" selection-start-line="300" selection-start-column="11" selection-end-line="300" selection-end-column="11" />
+        <state relative-caret-position="-318">
+          <caret line="486" selection-start-line="486" selection-end-line="486" />
           <folding>
             <element signature="e#127#161#0" expanded="true" />
+            <element signature="e#11083#11104#0" />
+            <element signature="e#11252#11662#1" />
+            <element signature="e#11658#11665#0" />
+            <element signature="e#13346#13367#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sqlova/utils/utils_wikisql.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="1707" selection-start-line="1707" selection-end-line="1707" />
+          <folding>
+            <element signature="e#113#128#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sqlova/model/nl2sql/wikisql_models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="61" column="47" lean-forward="true" selection-start-line="61" selection-start-column="47" selection-end-line="61" selection-end-column="47" />
+          <folding>
+            <element signature="e#113#128#0" expanded="true" />
           </folding>
         </state>
       </provider>

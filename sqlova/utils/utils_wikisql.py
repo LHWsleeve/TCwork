@@ -908,7 +908,9 @@ def pred_sc(s_sc):
     # get g_num
     pr_sc = []
     for s_sc1 in s_sc:
-        pr_sc.append([s_sc1.argmax().item()]) #要返回一个二维数组，我自己加了一个[]，源代码没有，暂时不知哪里出现维度错误
+        pr_sc.append(s_sc1.argmax().item()) #要返回一个二维数组，我自己加了一个[]，源代码没有，暂时不知哪里出现维度错误 \
+                                            # pr_sc.append([s_sc1.argmax().item()])
+                                            #删除baseline的scp不需要加[]
 
     return pr_sc
 
