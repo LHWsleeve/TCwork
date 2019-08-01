@@ -74,13 +74,18 @@ class Seq2SQL_v1(nn.Module):
 
         # sa 预测agg
         s_sa = self.sap(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num, gt_sel=pr_sc)
+        if g_sa:
+            # it's not necessary though.
+            pr_sa = g_sa
+        else:
+            pr_sa = pred_sa(s_sa)
 
         # sop 预测条件咧的操作  like 'and', 'or'
         s_sop = self.sop(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num)
         if g_sop:
             pr_sop = g_sop  # 估计是用不到
-        else:
-           s_sop = self.sop(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, pr_sc)
+        # else:
+        #    s_sop = self.sop(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, pr_sc)
 
         # wn
         s_wn = self.wnp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, show_p_wn=show_p_wn)
@@ -88,6 +93,7 @@ class Seq2SQL_v1(nn.Module):
         if g_wn:
             pr_wn = g_wn
         else:
+            pr_wn = pred_wn(s_wn)
             print("wn 没有给实际值")
             exit()
 
@@ -97,6 +103,7 @@ class Seq2SQL_v1(nn.Module):
         if g_wc:
             pr_wc = g_wc
         else:
+            pr_wc = pred_wc(pr_wn, s_wc)
             print("wc 没有给实际值")
             exit()
 
@@ -106,6 +113,7 @@ class Seq2SQL_v1(nn.Module):
         if g_wo:
             pr_wo = g_wo
         else:
+            pr_wo = pred_wo(pr_wn, s_wo)
             print("wo 没有给实际值")
             exit()
         # wv
