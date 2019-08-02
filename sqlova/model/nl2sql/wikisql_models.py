@@ -60,7 +60,7 @@ class Seq2SQL_v1(nn.Module):
             pr_scn = g_scn
 
         # sc 预测sel第几列
-        s_sc = self.scp(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num)
+        s_sc = self.scp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, show_p_sc=show_p_sc)
 
         if g_sc:
             pr_sc = g_sc
@@ -68,7 +68,7 @@ class Seq2SQL_v1(nn.Module):
             pr_sc = pred_sc(s_sc)
 
         # sa 预测agg
-        s_sa = self.sap(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num, gt_sel=pr_sc)
+        s_sa = self.sap(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, pr_sc, show_p_sa=show_p_sa)
         if g_sa:
             # it's not necessary though.
             pr_sa = g_sa
@@ -332,7 +332,7 @@ class Seq2SQL_v1(nn.Module):
             # find the most-probable columns' indexes
             max_agg_idxes = np.argsort(-agg_score[b])[:sel_num]
             cur_query['sel'].extend([int(i) for i in max_col_idxes])
-            cur_query['agg'].extend([i[0] for i in max_agg_idxes])
+            cur_query['agg'].extend([int(i) for i in max_agg_idxes])
             cur_query['cond_conn_op'] = np.argmax(where_rela_score[b])
             ret_queries.append(cur_query)
         return ret_queries
@@ -504,42 +504,78 @@ class SCP(nn.Module):
         self.lS = lS
         self.dr = dr
 
-        self.sel_lstm = nn.LSTM(input_size=iS, hidden_size=hS // 2,
-                                    num_layers=lS, batch_first=True,
-                                    dropout=dr, bidirectional=True)
+        self.enc_h = nn.LSTM(input_size=iS, hidden_size=int(hS / 2),
+                             num_layers=lS, batch_first=True,
+                             dropout=dr, bidirectional=True)
 
-        self.sel_att = nn.Linear(hS, hS)
+        self.enc_n = nn.LSTM(input_size=iS, hidden_size=int(hS / 2),
+                             num_layers=lS, batch_first=True,
+                             dropout=dr, bidirectional=True)
 
-        self.sel_col_name_enc = nn.LSTM(input_size=iS, hidden_size=hS // 2,
-                                    num_layers=lS, batch_first=True,
-                                    dropout=dr, bidirectional=True)
-        self.sel_out_K = nn.Linear(hS, hS)
-        self.sel_out_col = nn.Linear(hS, hS)
-        self.sel_out = nn.Sequential(nn.Tanh(), nn.Linear(hS, 1))
-        self.softmax = nn.Softmax(dim=-1)
+        self.W_att = nn.Linear(hS, hS)
+        self.W_c = nn.Linear(hS, hS)
+        self.W_hs = nn.Linear(hS, hS)
+        self.sc_out = nn.Sequential(nn.Tanh(), nn.Linear(2 * hS, 1))
 
-    def forward(self, x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num):
+        self.softmax_dim1 = nn.Softmax(dim=1)
+        self.softmax_dim2 = nn.Softmax(dim=2)
+
+    def forward(self, wemb_n, l_n, wemb_hpu, l_hpu, l_hs, show_p_sc=False):
         # Based on number of selections to predict select-column
-        B = len(x_emb_var)
-        max_x_len = max(x_len)
+        wenc_n = encode(self.enc_n, wemb_n, l_n,
+                        return_hidden=False,
+                        hc0=None,
+                        last_only=False)  # [b, n, dim]
 
-        e_col, _ = col_name_encode(col_inp_var, col_name_len, col_len, self.sel_col_name_enc)  # [bs, col_num, hid]
-        h_enc, _ = run_lstm(self.sel_lstm, x_emb_var, x_len)  # [bs, seq_len, hid]
+        wenc_hs = encode_hpu(self.enc_h, wemb_hpu, l_hpu, l_hs)  # [b, hs, dim]
 
-        att_val = torch.bmm(e_col, self.sel_att(h_enc).transpose(1, 2))  # [bs, col_num, seq_len]
-        for idx, num in enumerate(x_len):
-            if num < max_x_len:
-                att_val[idx, :, num:] = -100
-        att = self.softmax(att_val.view((-1, max_x_len))).view(B, -1, max_x_len)
-        K_sel_expand = (h_enc.unsqueeze(1) * att.unsqueeze(3)).sum(2)
+        bS = len(l_hs)
+        mL_n = max(l_n)
 
-        sel_score = self.sel_out(self.sel_out_K(K_sel_expand) + self.sel_out_col(e_col)).squeeze()
-        max_col_num = max(col_num)
-        for idx, num in enumerate(col_num):
-            if num < max_col_num:
-                sel_score[idx, num:] = -100
+        #   [bS, mL_hs, 100] * [bS, 100, mL_n] -> [bS, mL_hs, mL_n]
+        att_h = torch.bmm(wenc_hs, self.W_att(wenc_n).transpose(1, 2))
 
-        return sel_score
+        #   Penalty on blank parts
+        for b, l_n1 in enumerate(l_n):
+            if l_n1 < mL_n:
+                att_h[b, :, l_n1:] = -10000000000
+
+        p_n = self.softmax_dim2(att_h)
+        if show_p_sc:
+            # p = [b, hs, n]
+            if p_n.shape[0] != 1:
+                raise Exception("Batch size should be 1.")
+            fig = figure(2001, figsize=(12, 3.5))
+            # subplot(6,2,7)
+            subplot2grid((7, 2), (3, 0), rowspan=2)
+            cla()
+            _color = 'rgbkcm'
+            _symbol = '.......'
+            for i_h in range(l_hs[0]):
+                color_idx = i_h % len(_color)
+                plot(p_n[0][i_h][:].data.numpy() - i_h, '--' + _symbol[color_idx] + _color[color_idx], ms=7)
+
+            title('sc: p_n for each h')
+            grid(True)
+            fig.tight_layout()
+            fig.canvas.draw()
+            show()
+
+        #   p_n [ bS, mL_hs, mL_n]  -> [ bS, mL_hs, mL_n, 1]
+        #   wenc_n [ bS, mL_n, 100] -> [ bS, 1, mL_n, 100]
+        #   -> [bS, mL_hs, mL_n, 100] -> [bS, mL_hs, 100]
+        c_n = torch.mul(p_n.unsqueeze(3), wenc_n.unsqueeze(1)).sum(dim=2)
+
+        vec = torch.cat([self.W_c(c_n), self.W_hs(wenc_hs)], dim=2)
+        s_sc = self.sc_out(vec).squeeze(2)  # [bS, mL_hs, 1] -> [bS, mL_hs]
+
+        # Penalty
+        mL_hs = max(l_hs)
+        for b, l_hs1 in enumerate(l_hs):
+            if l_hs1 < mL_hs:
+                s_sc[b, l_hs1:] = -10000000000
+
+        return s_sc
 
 
 class SAP(nn.Module):
@@ -551,11 +587,11 @@ class SAP(nn.Module):
         self.dr = dr
 
 
-        self.enc_h = nn.LSTM(input_size=iS, hidden_size=int(hS // 2),
+        self.enc_h = nn.LSTM(input_size=iS, hidden_size=int(hS / 2),
                              num_layers=lS, batch_first=True,
                              dropout=dr, bidirectional=True)
 
-        self.enc_n = nn.LSTM(input_size=iS, hidden_size=int(hS // 2),
+        self.enc_n = nn.LSTM(input_size=iS, hidden_size=int(hS / 2),
                              num_layers=lS, batch_first=True,
                              dropout=dr, bidirectional=True)
 
@@ -564,39 +600,58 @@ class SAP(nn.Module):
                                     nn.Tanh(),
                                     nn.Linear(hS, n_agg_ops))  # Fixed number of aggregation operator.
 
-        self.softmax = nn.Softmax(dim=-1)
+        self.softmax_dim1 = nn.Softmax(dim=1)
         self.softmax_dim2 = nn.Softmax(dim=2)
-        self.agg_out_K = nn.Linear(hS, hS)
-        self.col_out_col = nn.Linear(hS, hS)
 
         if old:
             # for backwoard compatibility
             self.W_c = nn.Linear(hS, hS)
             self.W_hs = nn.Linear(hS, hS)
 
-    def forward(self, x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num, gt_sel=None):
-        B = len(x_emb_var)
-        max_x_len = max(x_len)
+    def forward(self, wemb_n, l_n, wemb_hpu, l_hpu, l_hs, pr_sc, show_p_sa=False):
+        # Encode
+        wenc_n = encode(self.enc_n, wemb_n, l_n,
+                        return_hidden=False,
+                        hc0=None,
+                        last_only=False)  # [b, n, dim]
 
-        e_col, _ = col_name_encode(col_inp_var, col_name_len, col_len, self.enc_h)
-        h_enc, _ = run_lstm(self.enc_n, x_emb_var, x_len)
+        wenc_hs = encode_hpu(self.enc_h, wemb_hpu, l_hpu, l_hs)  # [b, hs, dim]
 
-        col_emb = []
-        for b in range(B):
-            cur_col_emb = torch.stack([e_col[b, x] for x in gt_sel[b]] + [e_col[b, 0]] * (4 - len(gt_sel[b])))
-            col_emb.append(cur_col_emb)
-        col_emb = torch.stack(col_emb)
+        bS = len(l_hs)
+        mL_n = max(l_n)
 
-        att_val = torch.matmul(self.W_att(h_enc).unsqueeze(1), col_emb.unsqueeze(3)).squeeze()  # .transpose(1,2))
+        wenc_hs_ob = wenc_hs[list(range(bS)), pr_sc]  # list, so one sample for each batch.
 
-        for idx, num in enumerate(x_len):
-            if num < max_x_len:
-                att_val[idx, num:] = -100
-        att = self.softmax(att_val.view(B * 4, -1)).view(B, 4, -1)
+        # [bS, mL_n, 100] * [bS, 100, 1] -> [bS, mL_n]
+        att = torch.bmm(self.W_att(wenc_n), wenc_hs_ob.unsqueeze(2)).squeeze(2)
 
-        K_agg = (h_enc.unsqueeze(1) * att.unsqueeze(3)).sum(2)
-        agg_score = self.sa_out(self.agg_out_K(K_agg) + self.col_out_col(col_emb)).squeeze()
-        return agg_score
+        #   Penalty on blank parts
+        for b, l_n1 in enumerate(l_n):
+            if l_n1 < mL_n:
+                att[b, l_n1:] = -10000000000
+        # [bS, mL_n]
+        p = self.softmax_dim1(att)
+
+        if show_p_sa:
+            if p.shape[0] != 1:
+                raise Exception("Batch size should be 1.")
+            fig = figure(2001);
+            subplot(7, 2, 3)
+            cla()
+            plot(p[0].data.numpy(), '--rs', ms=7)
+            title('sa: nlu_weight')
+            grid(True)
+            fig.tight_layout()
+            fig.canvas.draw()
+            show()
+
+        #    [bS, mL_n, 100] * ( [bS, mL_n, 1] -> [bS, mL_n, 100])
+        #       -> [bS, mL_n, 100] -> [bS, 100]
+        c_n = torch.mul(wenc_n, p.unsqueeze(2).expand_as(wenc_n)).sum(dim=1)
+        s_sa = self.sa_out(c_n)
+
+        return s_sa
+
 
 class WNP(nn.Module):
     def __init__(self, iS=300, hS=100, lS=2, dr=0.3, ):
@@ -1144,30 +1199,13 @@ def Loss_scn(s_scn, g_sel_num_seq):
 
 def Loss_sc(s_sc, g_sc):
     # Evaluate select column
-    B = len(g_sc)
-    T = len(s_sc[0])
-    truth_prob = np.zeros((B, T), dtype=np.float32)
-    for b in range(B):
-        truth_prob[b][list(g_sc[b])] = 1
-    data = torch.from_numpy(truth_prob)
-    sel_col_truth_var = Variable(data.cuda())
-    sigm = nn.Sigmoid()
-    sel_col_prob = sigm(s_sc)
-    loss = -torch.mean(
-        3 * (sel_col_truth_var * torch.log(sel_col_prob + 1e-10)) +
-        (1 - sel_col_truth_var) * torch.log(1 - sel_col_prob + 1e-10)
-    )
+    loss = F.cross_entropy(s_sc, torch.tensor(g_sc).to(device))
 
     return loss
 
 def Loss_sa(s_sa, g_sa):
     # loss = F.cross_entropy(s_sa, torch.tensor(g_sa).to(device))
-    loss = 0
-    for b in range(len(g_sa)):
-        data = torch.from_numpy(np.array(g_sa[b]))
-        sel_agg_truth_var = Variable(data.cuda())
-        sel_agg_pred = s_sa[b, :len(g_sa[b])]
-        loss += (F.cross_entropy(sel_agg_pred, sel_agg_truth_var)) / len(g_sa)
+    loss = F.cross_entropy(s_sa, torch.tensor(g_sa).to(device))
 
     return loss
 

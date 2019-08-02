@@ -240,6 +240,19 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
         # g_sel_num_seq真实sel的个数
         # g_sel_ag_seq 包含一个元组，agg个数，sel实际值，agg实际值（list）
         # get ground truth where-value index under CoreNLP tokenization scheme. It's done already on trainset.
+        '''
+        去除baseline情况的，需要把g_sc /g_sa换成一位数组
+        '''
+        g_sc1 = []
+        for i in range(len(g_sc)):
+            g_sc1.append(g_sc[i][0])
+        g_sc = g_sc1
+
+        g_sa1 = []
+        for i in range(len(g_sa)):
+            g_sa1.append(g_sa[i][0])
+        g_sa = g_sa1
+
 
         # 这里提取了语义索引
         g_wvi_corenlp = get_g_wvi_corenlp(t)
