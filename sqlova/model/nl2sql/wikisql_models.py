@@ -58,8 +58,6 @@ class Seq2SQL_v1(nn.Module):
         s_scn = self.scnp(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num)
         if g_scn:
             pr_scn = g_scn
-        else:
-            print('g_scn dev/test不监督')
 
         # sc 预测sel第几列
         s_sc = self.scp(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num)
@@ -91,7 +89,6 @@ class Seq2SQL_v1(nn.Module):
             pr_wn = g_wn
         else:
             pr_wn = pred_wn(s_wn)
-            print("wn dev/test不监督")
 
         # wc
         s_wc = self.wcp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, show_p_wc=show_p_wc, penalty=True)
@@ -100,7 +97,6 @@ class Seq2SQL_v1(nn.Module):
             pr_wc = g_wc
         else:
             pr_wc = pred_wc(pr_wn, s_wc)
-            print("wc dev/test不监督")
 
         # wo
         s_wo = self.wop(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, wn=pr_wn, wc=pr_wc, show_p_wo=show_p_wo)
@@ -109,7 +105,6 @@ class Seq2SQL_v1(nn.Module):
             pr_wo = g_wo
         else:
             pr_wo = pred_wo(pr_wn, s_wo)
-            print("wo dev/test不监督")
         # wv
         s_wv = self.wvp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, wn=pr_wn, wc=pr_wc, wo=pr_wo, show_p_wv=show_p_wv)
 
@@ -204,7 +199,7 @@ class Seq2SQL_v1(nn.Module):
         # wc
         s_wc = self.wcp(wemb_n, l_n, wemb_hpu, l_hpu, l_hs, show_p_wc=show_p_wc, penalty=True)
         # prob_wc = F.sigmoid(s_wc).detach().to('cpu').numpy()
-        prob_wc = F.sigmoid(s_wc).detach().to(device).numpy()
+        prob_wc = torch.sigmoid(s_wc).detach().to(device).numpy()
 
         # pr_wc_sorted_by_prob = pred_wc_sorted_by_prob(s_wc)
 
@@ -1190,7 +1185,7 @@ def Loss_wc(s_wc, g_wc):
         for g_wc11 in g_wc1:
             im[b, g_wc11] = 1.0
     # Construct prob.
-    p = F.sigmoid(s_wc)
+    p = torch.sigmoid(s_wc)
     loss = F.binary_cross_entropy(p, im)
 
     return loss
