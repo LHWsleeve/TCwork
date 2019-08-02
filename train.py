@@ -213,20 +213,16 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
           st_pos=0, opt_bert=None, path_db=None, dset_name='train'):
     model.train()
     model_bert.train()
-    badcase = 0
     ave_loss, one_acc_num, tot_acc_num, ex_acc_num = 0, 0.0, 0.0, 0.0
-
     cnt = 0  # count the # of examples
     # Engine for SQL querying.
     # 这里别忘了改，引擎要变成新的
     engine = DBEngine(os.path.join(path_db, f"{dset_name}.db"))
-    now = time.time()
+    pbar = tqdm(range(len(train_loader.dataset)//16))
+
     for iB, t in enumerate(train_loader):
         # t 是一个完整的tok文件
         cnt += len(t)
-
-        print("处理个数= %s", cnt)
-
         if cnt < st_pos:
             continue
         # Get fields
@@ -312,9 +308,6 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
         #         print(nlu_1)
         #         exit()
 
-        end = time.time()
-        print('runs %0.2f seconds.' % (end - now))
-
         loss = Loss_sw_se(s_scn, s_sc, s_sa, s_sop, s_wn, s_wc, s_wo, s_wv,
                           g_sel_num_seq, g_sc, g_sa, g_sop, g_wn, g_wc, g_wo, g_wvi)
 
@@ -342,6 +335,7 @@ def train(train_loader, train_table, model, model_bert, opt, bert_config, tokeni
         # L = loss.item()
         ave_loss += loss.item()
 
+        pbar.update(len(t))
     return ave_loss / cnt
 
 
@@ -400,6 +394,7 @@ def test(data_loader, data_table, model, model_bert, bert_config, tokenizer,
     model.eval()
     model_bert.eval()
 
+    print('g_scn/wc/wn/wo dev/test不监督')
     cnt = 0
 
     engine = DBEngine(os.path.join(path_db, f"{dset_name}.db"))
@@ -646,8 +641,6 @@ if __name__ == '__main__':
             print('Best val acc: %s\nOn epoch individually %s' % (
                 (best_sn, best_sc, best_sa, best_wn, best_wc, best_wo, best_wv),
                 (best_sn_idx, best_sc_idx, best_sa_idx, best_wn_idx, best_wc_idx, best_wo_idx, best_wv_idx)))
-        for i in trange(args.tepoch):
-            pass
 
     # save results for the official evaluation
     # save_for_evaluation(path_save_for_evaluation, results_dev, 'dev')
