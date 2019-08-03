@@ -99,6 +99,7 @@ def predict(data_loader, data_table, model, model_bert, bert_config, tokenizer,
             = get_wemb_bert(bert_config, model_bert, tokenizer, nlu_t, hds, max_seq_length,
                             num_out_layers_n=num_target_layers, num_out_layers_h=num_target_layers)
         try:
+            pass
             g_wvi = get_g_wvi_bert_from_g_wvi_corenlp(t_to_tt_idx, g_wvi_corenlp)
         except:
             # Exception happens when where-condition is not found in nlu_tt.
@@ -151,23 +152,19 @@ def predict(data_loader, data_table, model, model_bert, bert_config, tokenizer,
 
         # # Saving for the official evaluation later.
         for b, pr_sql_i1 in enumerate(pr_sql_i):
-            results1 = {}
-            results1["query"] = pr_sql_i1
-            results1["table_id"] = tb[b]["id"]
-            results1["nlu"] = nlu[b]
-            results.append(results1)
+            results.append(pr_sql_i1)
 
 
     return results
 
 ## Set up hyper parameters and paths
 parser = argparse.ArgumentParser()
-parser.add_argument("--model_file", required=True, help='model file to use (e.g. saved_model/model_best.pt)')
-parser.add_argument("--bert_model_file", required=True, help='bert model file to use (e.g. saved_modelmodel_bert_best.pt)')
-parser.add_argument("--bert_path", required=True, help='path to bert files (bert_config*.json etc)')
-parser.add_argument("--data_path", required=True, help='path to *.jsonl and *.db files')
-parser.add_argument("--split", required=True, help='prefix of jsonl and db files (e.g. dev)')
-parser.add_argument("--result_path", required=True, help='directory in which to place results')
+parser.add_argument("--model_file", default='saved_model', help='model file to use (e.g. saved_model/model_best.pt)')
+parser.add_argument("--bert_model_file",default='saved_model' , help='bert model file to use (e.g. saved_modelmodel_bert_best.pt)')
+parser.add_argument("--bert_path",default='data/wikisql_tok1', help='path to bert files (bert_config*.json etc)')
+parser.add_argument("--data_path", default='data/wikisql_tok1', help='path to *.jsonl and *.db files')
+parser.add_argument("--split", default='data/wikisql_tok1', help='prefix of jsonl and db files (e.g. dev)')
+parser.add_argument("--result_path",default='./', help='directory in which to place results')
 args = construct_hyper_param(parser)
 
 BERT_PT_PATH = args.bert_path
