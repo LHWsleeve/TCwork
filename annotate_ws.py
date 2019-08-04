@@ -16,6 +16,8 @@ from fencibijiao import *
 import time
 import multiprocessing as mp
 client = None
+import jieba
+jieba.load_userdict("/home/sleeve/桌面/TCwork_git/data/wikisql_tok1/userdict.txt")
 
 
 def annotate(sentence, lower=True):
@@ -112,6 +114,28 @@ def check_wv_tok_in_nlu_tok(wv_tok1, nlu_t1):
     return g_wvi1_corenlp
 
 
+def not_empty(s):
+    return s and s.strip()
+
+def stopwordslist(filepath):
+    stopwords = [line.strip() for line in open(filepath, 'r', encoding='utf-8').readlines()]
+    return stopwords
+
+def movestopwords(sentence):
+    common_used_numerals_tmp = {'零': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9, '十': 10}
+    stopwords = stopwordslist('/home/sleeve/桌面/TCwork_git/data/wikisql_tok1/ChineseStopWords.txt')  # 这里加载停用词的路径
+    outstr = []
+    for word in sentence:
+        if word not in stopwords:
+            if word != '\t'and'\n':
+                try:
+                    word = common_used_numerals_tmp[word]
+                except:
+                    pass
+                outstr.append(str(word))
+                # outstr += " "
+    return outstr
+
 def annotate_example_ws(example, table, fout, cnt, start):
     """
     Jan. 2019: Wonseok
@@ -119,9 +143,12 @@ def annotate_example_ws(example, table, fout, cnt, start):
     """
     with open(fout, 'a+') as fo:
         ann = {'table_id': example['table_id']}
-        _nlu_ann = annotate(example['question'])
+        _nlu_ann = list(jieba.cut_for_search(example['question']))
+        _nlu_ann = movestopwords(_nlu_ann)
+
         ann['question'] = example['question']
-        ann['question_tok'] = _nlu_ann['gloss']
+        a = list(filter(not_empty, _nlu_ann))
+        ann['question_tok'] = a
         '''
         训练集和验证集需要使用以下代码，测试集不需要
         '''
@@ -135,8 +162,8 @@ def annotate_example_ws(example, table, fout, cnt, start):
         conds1 = ann['sql']['conds']
         wv_ann1 = []
         for conds11 in conds1:
-            _wv_ann1 = annotate(str(conds11[2]))
-            wv_ann11 = _wv_ann1['gloss']
+            _wv_ann1 = list(jieba.cut(str(conds11[2]),cut_all=True))
+            wv_ann11 = _wv_ann1
             wv_ann1.append(wv_ann11)
 
             # Check whether wv_ann exsits inside question_tok
@@ -179,7 +206,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--din', default='/home/sleeve/桌面/TCwork_git/data/wikisql_tok1', help='data directory')
     parser.add_argument('--dout', default='/home/sleeve/桌面/TCwork_git/data/wikisql_tok1/test_tok', help='output directory')
-    parser.add_argument('--split', default='train, dev', help='comma=separated list of splits to process') #'train,dev,test'
+    parser.add_argument('--split', default='train', help='comma=separated list of splits to process') #'train,dev,test'
     args = parser.parse_args()
 
     answer_toy = not True
@@ -207,7 +234,7 @@ if __name__ == '__main__':
             n_written = 0
             cnt = -1
 
-            pool = mp.Pool(2)
+            pool = mp.Pool(4)
             for line in tqdm(fs, total=count_lines(fsplit)):
                 start = time.time()
                 cnt += 1

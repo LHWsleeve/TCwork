@@ -24,25 +24,29 @@ class Encoding(object):
     #第一次尝试选择skleran
 def Encode(wv_tok,nlu_t1):
     vec = Encoding()
-    max_sum = [0, 0, 0, 0]
-    idx_sum = [0, 0, 0, 0]
+    max_sum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    idx_sum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-    for size in range(1,5):
+    for size in range(1, 5):
         similarity_max1 = 0
 
         if nlu_t1 is None or size > len(nlu_t1) or size == 0:
-            print("滑动窗口出错")
+            print("滑动窗口大小出错")
             print(nlu_t1)
             print(size)
             break
         for i in range(len(nlu_t1) - size + 1):
-
             size_b1 = ''.join(nlu_t1[i:i + size]) #滑动size加入列表 i是起始索引，i+size是结束索引
             similarity = vec.query_similarity([size_b1, wv_tok])
+
             if similarity > similarity_max1:
                 similarity_max1 = similarity
                 max_sum[size-1] = similarity_max1
                 idx_sum[size-1] = [i, i+size]
+                if similarity_max1 ==1:
+                    break
+                else:
+                    continue
             else:
                 continue
 
